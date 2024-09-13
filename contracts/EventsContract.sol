@@ -53,24 +53,41 @@ contract EventsManager {
     }
 
     function registerForEvent(uint256 _eventId) external {
-        require(msg.sender != address(0), "address zero found");
         require(_eventId > 0, "invalid id");
-        
-        
+
+        // Check that user owns at least one NFT (token ID ownership check example)
+        require(nftContractAddress.balanceOf(msg.sender) > 0, "access denied: must own NFT");
+
         Event storage evnt = events[_eventId];
         require(!evnt.hasEnded, "event has ended");
-
-
-        // check that user has the NFT
-        require(nftContractAddress.balanceOf(msg.sender) >= 0, "access denied. Mint NFT");
         require(!hasRegistered[msg.sender][_eventId], "already registered");
+
+        // Update attendee count and registration status
+        evnt.noOfAttendees += 1;
+        hasRegistered[msg.sender][_eventId] = true;
+    }
+
+    // Old function(problematic) - check it again
+    // function registerForEvent(uint256 _eventId) external {
+    //     require(msg.sender != address(0), "address zero found");
+    //     require(_eventId > 0, "invalid id");
+        
+        
+    //     Event storage evnt = events[_eventId];
+    //     require(!evnt.hasEnded, "event has ended");
+
+        // Replace `tokenOfOwnerByIndex` if the contract supports ERC721Enumerable, or a custom check
+
+    //     // check that user has the NFT
+    //     require(nftContractAddress.balanceOf(msg.sender) > 0, "access denied. Mint NFT");
+    //     require(!hasRegistered[msg.sender][_eventId], "already registered");
 
         
 
-        evnt.noOfAttendees += 1;
-        hasRegistered[msg.sender][_eventId] = true;
+    //     evnt.noOfAttendees += 1;
+    //     hasRegistered[msg.sender][_eventId] = true;
 
-    }
+    // }
 
 
 }
