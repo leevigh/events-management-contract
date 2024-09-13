@@ -72,7 +72,5 @@ contract EventsManager {
 
     }
 
-    function cancelAttendance(uint256 _eventId) external {}
 
-    function checkInToEvent() external {}
 }
